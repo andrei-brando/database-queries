@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres
+    container_name: database
+    restart: always
+    ports:
+      - 5432:5432
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=queries_challenge
+    volumes: 
+      - pgdata:/data/postgres
+  app:
+    build: .
+    container_name: queries
+    ports:
+      - 3333:3333
+      - 9229:9229 #Você pode inserir essa porta tbm pra poder usar o debug
+    volumes:
+      - .:/usr/app
+    links:
+      - database
+    depends_on: 
+      - database
+
+
+volumes:
+  pgdata:
+    driver: local
